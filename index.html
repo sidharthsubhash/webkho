@@ -13,21 +13,23 @@
             background-color: #0a0a0a;
             color: #fff;
             scroll-behavior: smooth;
-            cursor: none; /* hide default cursor */
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
         }
 
         /* Custom Cursor */
         .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 20px;
             height: 20px;
-            background-color: white;
+            background: white;
             border-radius: 50%;
-            position: fixed;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            transition: transform 0.1s ease;
-            mix-blend-mode: difference;
-            z-index: 2000;
+            transition: transform 0.1s ease-out;
+            z-index: 3000;
         }
 
         /* Particles.js background */
@@ -124,6 +126,11 @@
             margin-bottom: 2rem;
         }
 
+        .typed-text {
+            color: #FFD700;
+            font-weight: 600;
+        }
+
         .btn-primary {
             background-color: #FFD700;
             border: none;
@@ -146,26 +153,46 @@
         #services {
             padding: 5rem 0;
             margin: 4rem auto;
-            background: #111;
+            background: rgba(17, 17, 17, 0.8);
             border-radius: 15px;
             max-width: 90%;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
         .service-item {
-            background: #1a1a1a;
+            background: rgba(26, 26, 26, 0.85);
             border-radius: 10px;
             padding: 2rem;
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             border: 1px solid #333;
             margin-bottom: 2rem;
+            cursor: pointer;
         }
 
         .service-item:hover {
             transform: translateY(-8px);
             box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
             border-color: #FFD700;
+        }
+
+        .service-item h4 {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .service-item p {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 1rem;
         }
 
         /* About Section */
@@ -186,26 +213,16 @@
             margin: 0 auto;
         }
 
-        /* Contact Section (Email only) */
-        #contact {
-            padding: 5rem 0;
-            margin: 4rem auto;
-            background: #111;
-            border-radius: 15px;
-            max-width: 90%;
+        /* Contact Section */
+        #contact p {
             text-align: center;
-        }
-
-        .email-link {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #FFD700;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .email-link:hover {
-            color: #fff;
+            background: rgba(26, 26, 26, 0.85);
+            padding: 1rem;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         /* Footer */
@@ -216,7 +233,7 @@
             color: #aaa;
             margin-top: 4rem;
         }
-
+        
         /* Loader */
         #loader {
             position: fixed;
@@ -247,18 +264,15 @@
             opacity: 0;
             visibility: hidden;
         }
-
-        
     </style>
 </head>
 <body>
     <div id="particles-js"></div>
+    <div class="custom-cursor"></div>
+
     <div id="loader">
         <img src="webkho_tlogo.png" alt="WebKho Logo" class="loader-logo">
     </div>
-
-    <div class="custom-cursor"></div>
-    
 
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="#"><img src="webkho_tlogo.png" alt="WebKho Logo"></a>
@@ -281,7 +295,7 @@
     <header>
         <div>
             <h1>WebKho</h1>
-            <p>Unique Ideas For Your Business</p>
+            <p><span class="typed-text"></span></p>
             <a href="#services" class="btn btn-primary mt-3">Explore Services</a>
         </div>
     </header>
@@ -312,49 +326,97 @@
         </div>
     </section>
 
-    <section id="contact">
+    <section id="contact" class="container py-5">
         <h2 class="section-title">Get in Touch</h2>
-        <p><a href="mailto:webkhocompany@gmail.com" class="email-link">webkhocompany@gmail.com</a></p>
+        <p style="color: whitesmoke;">Email us at: <strong >webkhocompany@gmail.com</strong></p>
     </section>
 
     <footer>
         <p>© 2025 WebKho. All rights reserved.</p>
     </footer>
 
+    <!-- JS Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+
     <script>
-    // Loader hide
+    // Loader
     window.addEventListener("load", () => {
         document.getElementById("loader").classList.add("hidden");
     });
 
-    // Particles
+    // Custom Cursor
+    const cursor = document.querySelector(".custom-cursor");
+    document.addEventListener("mousemove", e => {
+        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    });
+
+    // Particles.js
     particlesJS("particles-js", {
         "particles": {
             "number": { "value": 90 },
             "color": { "value": "#FFD700" },
             "shape": { "type": "circle" },
             "opacity": { "value": 0.9, "random": true },
-            "size": { "value": 5, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 1 }},
+            "size": { "value": 5, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 1 } },
             "line_linked": { "enable": false },
             "move": { "enable": true, "speed": 1.5, "random": true, "out_mode": "out" }
         },
         "interactivity": {
-            "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" }},
-            "modes": { "bubble": { "distance": 150, "size": 7, "duration": 0.3, "opacity": 1 }, "push": { "particles_nb": 3 }}
+            "events": {
+                "onhover": { "enable": true, "mode": "bubble" },
+                "onclick": { "enable": true, "mode": "push" }
+            },
+            "modes": {
+                "bubble": { "distance": 150, "size": 7, "duration": 0.3, "opacity": 1 },
+                "push": { "particles_nb": 3 }
+            }
         },
         "retina_detect": true
     });
 
-    // Custom cursor follow
-    const cursor = document.querySelector(".custom-cursor");
-    document.addEventListener("mousemove", (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
+    // Typed.js
+    new Typed(".typed-text", {
+        strings: ["Unique Ideas For Your Business", "Creative Web Solutions", "Modern Digital Experiences"],
+        typeSpeed: 60,
+        backSpeed: 40,
+        loop: true
     });
 
-  
+    // GSAP Animations
+    gsap.from("header h1", { opacity: 0, y: -50, duration: 1 });
+    gsap.from("header p", { opacity: 0, y: 30, duration: 1, delay: 0.3 });
+    gsap.from("header .btn-primary", { opacity: 0, scale: 0.8, duration: 0.8, delay: 0.6 });
+
+    gsap.utils.toArray(".section-title").forEach(title => {
+        gsap.from(title, {
+            scrollTrigger: { trigger: title, start: "top 80%" },
+            opacity: 0,
+            y: 30,
+            duration: 1
+        });
+    });
+
+    gsap.utils.toArray(".service-item").forEach(card => {
+        gsap.from(card, {
+            scrollTrigger: { trigger: card, start: "top 85%" },
+            opacity: 0,
+            y: 40,
+            duration: 0.6,
+            stagger: 0.2
+        });
+    });
+
+    // Vanilla Tilt for Service Cards
+    VanillaTilt.init(document.querySelectorAll(".service-item"), {
+        max: 10,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.3
+    });
     </script>
 </body>
 </html>
