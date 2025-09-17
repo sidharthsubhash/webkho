@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebKho</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            scroll-behavior: smooth;
+            cursor: none; /* hide default cursor */
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+            z-index: 2000;
+        }
+
+        /* Particles.js background */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #0a0a0a;
+        }
+        canvas {
+            filter: drop-shadow(0 0 8px #FFD700);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(17, 17, 17, 0.9);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0 15px;
+        }
+
+        .nav-link {
+            color: #FFD700 !important;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: #e6c200 !important;
+        }
+
+        /* Hero Section */
+        header {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background:
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url(webkho_tlogo.png) center/cover no-repeat;
+            margin-top: 70px;
+            padding: 100px 0;
+            position: relative;
+            border-radius: 15px;
+            margin-left: 5%;
+            margin-right: 5%;
+            width: 90%;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8));
+            z-index: 1;
+        }
+
+        header h1, header p, header .btn-primary {
+            position: relative;
+            z-index: 2;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            color: #FFD700;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background-color: #FFD700;
+            border: none;
+            color: #000;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 5px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Services Section */
+        #services {
+            padding: 5rem 0;
+            margin: 4rem auto;
+            background: #111;
+            border-radius: 15px;
+            max-width: 90%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .service-item {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border: 1px solid #333;
+            margin-bottom: 2rem;
+        }
+
+        .service-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            border-color: #FFD700;
+        }
+
+        /* About Section */
+        #about {
+            padding: 5rem 0;
+            margin: 4rem auto;
+            background: #111;
+            border-radius: 15px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        #about p {
+            color: #aaa;
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Contact Section (Email only) */
+        #contact {
+            padding: 5rem 0;
+            margin: 4rem auto;
+            background: #111;
+            border-radius: 15px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .email-link {
+            font-size: 1.5rem;
+            color: #FFD700;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .email-link:hover {
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            padding: 2rem 0;
+            text-align: center;
+            color: #aaa;
+            margin-top: 4rem;
+        }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-logo {
+            width: 120px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="loader">
+        <img src="webkho_tlogo.png" alt="WebKho Logo" class="loader-logo">
+    </div>
+
+    <div class="custom-cursor"></div>
+    
+
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="#"><img src="webkho_tlogo.png" alt="WebKho Logo"></a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center">
+            <a href="#contact" class="btn btn-primary me-3">Get In Touch</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+            </button>
+        </div>
+    </nav>
+
+    <header>
+        <div>
+            <h1>WebKho</h1>
+            <p>Unique Ideas For Your Business</p>
+            <a href="#services" class="btn btn-primary mt-3">Explore Services</a>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">About Us</h2>
+        <p>WebKho is a modern digital agency that specializes in crafting high-quality web solutions. 
+            We provide creative web designing and web development services tailored to help your business stand out online.</p>
+    </section>
+
+    <section id="services" class="container py-5">
+        <h2 class="section-title">Our Services</h2>
+        <div class="row justify-content-center g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item">
+                    <div class="service-icon"><i class="fas fa-desktop"></i></div>
+                    <h4>Web Development</h4>
+                    <p>We build responsive and high-performance websites tailored to your business needs.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item">
+                    <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h4>Web Designing</h4>
+                    <p>Our team creates modern, visually appealing designs that reflect your brand identity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Get in Touch</h2>
+        <p><a href="mailto:webkhocompany@gmail.com" class="email-link">webkhocompany@gmail.com</a></p>
+    </section>
+
+    <footer>
+        <p>© 2025 WebKho. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+    // Loader hide
+    window.addEventListener("load", () => {
+        document.getElementById("loader").classList.add("hidden");
+    });
+
+    // Particles
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 90 },
+            "color": { "value": "#FFD700" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.9, "random": true },
+            "size": { "value": 5, "random": true, "anim": { "enable": true, "speed": 2, "size_min": 1 }},
+            "line_linked": { "enable": false },
+            "move": { "enable": true, "speed": 1.5, "random": true, "out_mode": "out" }
+        },
+        "interactivity": {
+            "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" }},
+            "modes": { "bubble": { "distance": 150, "size": 7, "duration": 0.3, "opacity": 1 }, "push": { "particles_nb": 3 }}
+        },
+        "retina_detect": true
+    });
+
+    // Custom cursor follow
+    const cursor = document.querySelector(".custom-cursor");
+    document.addEventListener("mousemove", (e) => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+    });
+
+  
+    </script>
+</body>
+</html>
